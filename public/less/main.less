@@ -1,0 +1,132 @@
+/* ===== OSATT Main CSS file =====*/ 
+@import '../libs/bootstrap/less/bootstrap.less';
+
+/* Set Defaults */ 
+@icon-font-path: '../libs/bootstrap/fonts/';
+
+/*----------------
+/*  Color Palette
+/*----------------*/
+
+/* Colors */ 
+// Use Bootstrap defaults for now
+
+/* Grays*/ 
+// Use Bootstrap defaults for now
+@white: #fefefe;
+@black: #333;
+
+/*----------------
+/*  Helpers and extensions
+/*----------------*/
+.sm-col(@cols) {
+  .make-sm-column(@cols);
+  margin-bottom: 1.618em;
+}
+
+/*----------------
+/*  Typography
+/*----------------*/
+h1,h2,h3,h4,h5,h6 {
+  margin: .382em 0;
+}
+
+/*----------------
+/*  Structure
+/*----------------*/
+
+body {
+  background: url(../images/graph-texture.svg) top left repeat @white;
+  background-size: 6.25em;
+  font-family: Open Sans, Helvetica, Arial, Sans-serif;
+  font-size: 16px;
+  margin: 0;
+}
+
+header+.container {
+  background: @white;
+  .box-shadow(@shadow: 0 1px 3px rgba(0,0,0,.25));
+}
+
+header {
+   margin-right: -@grid-gutter-width/2;
+   margin-left: -@grid-gutter-width/2;
+   background: @gray-darker;
+   padding: 1.3em;
+   padding-bottom: 0;
+   color: #fff;
+}
+
+footer {
+  background: #c6c6c5;
+  color: #fff;
+}
+
+main {
+  .make-row();
+}
+
+aside {
+  .make-row();
+}
+
+/*----------------
+/* Navigation
+/*----------------*/
+
+.navbar-right {
+  margin-right: 0; // Unset the 'margin-right:-15px from Bootstraps navbar-right'
+}
+
+/*----------------
+/* UI Components
+/*----------------*/
+
+button {
+  .btn();
+}
+
+/*----------------
+/* Content Elements
+/*----------------*/
+
+.item-meta {
+  .sm-col(7);
+}
+
+.item-render {
+  .sm-col(7);
+}
+
+.item-specs {
+  .sm-col(5);
+}
+
+.item-view-nav {
+  margin-top: .618em;
+}
+
+.list-group-item-heading { 
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.item-related ul {
+  list-style-type: none;
+}
+.item-related li {
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.25);
+  display: inline-block;
+  margin: 1.3em;
+  width: 150px;
+  height: 150px;
+  vertical-align: top;
+}
+
+/* 3d Render Canvas */ 
+canvas {
+  border: 1px solid blue;
+  width: 100%;
+}
+
+/* project Meta info */ 

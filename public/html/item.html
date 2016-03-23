@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OSATT - Teapot 1.0</title>
+  <link rel="stylesheet" href="../less/main.less" type="text/less" />
+  <script type="text/javascript" src="../libs/less/less-1.7.3.min.js"></script>
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+
+  <header class="navbar navbar-static-top">
+    <div class="container">
+      <h1>OSATT - Open Source All The Things</h1>
+      <nav class="collapse navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Explore</a></li>
+          <li><a href="/">Search</a></li>
+          <li><a href="/">Develop</a></li>
+          <li><a href="/">About</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Account</a></li>
+          <li><a href="/">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <main role="main">
+      <section class="item-meta">
+        <h1>Teapot</h1>
+        <h2>ver 1.0</h2>
+        <span class="author">Maintained By - John Smith</span>
+        <span class="updated_on">July 25, 2014</span>
+
+        <div class="item-view-nav" role=toolbar>
+          <button class="btn btn-primary" type="button">
+            <i class="glyphicon glyphicon-wrench"></i> Build it
+          </button>
+          <button class="btn btn-primary" type="button">
+            <i class="glyphicon glyphicon-briefcase"></i> Improve it
+          </button>
+          <button class="btn btn-primary" type="button">
+            <i class="glyphicon glyphicon-info-sign"></i> Wiki
+          </button>
+          <button class="btn btn-primary" type="button">
+            <i class="glyphicon glyphicon-download"></i> Download project files
+          </button>
+        </div>
+      </section>
+
+      <section class="item-render">
+        <canvas id="teapot-canvas">
+          Your browser does not support canvas.
+        </canvas>
+      </section>
+
+      <div class="item-specs">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <h1 class="list-group-item-heading">Makes tea</h1>
+            <p class="list-group-item-text">
+              Tea is a delicious hot drink made from dried leaves.
+              This vessel is capable of containing the liquid tea brew
+              for transportation and heat energy retention.
+            </p>
+          </li>
+  
+          <li class="list-group-item">
+            <h1 class="list-group-item-heading">Delicious tea</h1>
+            <p class="list-group-item-text">
+              The recommended material for this teapot is ceramic, which will
+              ensures that tea tastes as-expected, without any unpleasant Aluminum 
+              or plastic like flavors.
+            </p>
+          </li>
+  
+          <li class="list-group-item">
+            <h1 class="list-group-item-heading">Looks nice too</h1>
+            <p class="list-group-item-text">
+              Did you see the pictures?
+            </p>
+          </li>
+          <li class="list-group-item">
+            <h1 class="list-group-item-heading">You should have one.</h1>
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <aside class="item-related">
+      <ul>
+        <li>
+          <h3>Teapot lid</h3>
+        </li>
+        <li>
+          <h3>Teaspoon</h3>
+        </li>
+        <li>
+          <h3>Teacup</h3>
+        </li>
+        <li>
+          <h3>Teacup saucer</h3>
+        </li>
+      </ul>
+    </aside>
+
+    <form id="test_form" action="/" method="POST">
+      <label for="test_input">Input: </label>
+      <input id="test_input" name="test_input" type="text" />
+
+      <button type="submit">submit</button>
+    </form>
+
+    <script src="../libs/jquery/dist/jquery.min.js"></script> <!-- jQuery -->
+    <script src="../libs/bootstrap/dist/js/bootstrap.min.js"></script> <!--Bootstrap --> 
+  </div>
+</body>
+</html>
