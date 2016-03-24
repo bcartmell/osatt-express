@@ -1,6 +1,5 @@
 'use strict';
 module.exports = function parseBuffer(data) {
-  console.log('parsing buffer:', data);
   let vertices = [];
 
   // the first 80 characters of an STL file are HEADER, which we can ignore
@@ -8,6 +7,7 @@ module.exports = function parseBuffer(data) {
   let facetsCount = data.readUIntLE(80,4);
   data = data.slice(84);
 
+  console.log('facetsCount', facetsCount);
 
   // start at 4 because the first 4 bytes is the facet count
   // only go to length-12 because this is where the last facet starts

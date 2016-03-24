@@ -1,19 +1,22 @@
 /* jshint esversion: 6 */
 import THREE from 'three';
 
+const OrbitControls = require('three-orbit-controls')(THREE);
+
 const renderer = new THREE.WebGLRenderer();
 let model;
 let scene = new THREE.Scene(); 
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-let light = new THREE.PointLight(0xffffff);
-let light1 = new THREE.PointLight(0xffffff);
 let material = new THREE.MeshLambertMaterial( {wireframe: false, color: 0x00ff00 });
 material.side = THREE.DoubleSide;
+
+let controls = new OrbitControls(camera);
+
+scene.add(new THREE.AmbientLight( 0x333333 ));
 
 renderer.setSize( window.innerWidth-10, window.innerHeight-10);
 renderer.setClearColor(0x90C3D4);
 document.body.appendChild(renderer.domElement);
-
 
 function makeModelGeo(meshArr) {
   var modelGeo = new THREE.Geometry();
@@ -26,37 +29,6 @@ function makeModelGeo(meshArr) {
 
   return modelGeo;
 }
-
-/* function makeMeshExample(vertexPositions) {
-  vertexPositions = vertexPositions || [
-      [-1.0, -1.0,  1.0],
-      [ 1.0, -1.0,  1.0],
-      [ 1.0,  1.0,  1.0],
-
-      [ 1.0,  1.0,  1.0],
-      [-1.0,  1.0,  1.0],
-      [-1.0, -1.0,  1.0]
-    ];
-
-  var geometry = new THREE.BufferGeometry();
-  // create a simple square shape. We duplicate the top left and bottom right
-  // vertices because each vertex needs to appear once per triangle.
-  var vertices = new Float32Array( vertexPositions.length * 3 ); // three components per vertex
-
-
-  // components of the position vector for each vertex are stored
-  // contiguously in the buffer.
-  for ( var i = 0; i < vertexPositions.length; i++ )
-  {
-    vertices[ i*3 + 0 ] = vertexPositions[i][0];
-    vertices[ i*3 + 1 ] = vertexPositions[i][1];
-    vertices[ i*3 + 2 ] = vertexPositions[i][2];
-  }
-
-  // itemSize = 3 because there are 3 values (components) per vertex
-  geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-  return new THREE.Mesh( geometry, material );
-} */
 
 function makeBufferGeometry(verticesArr) {
   let geometry = new THREE.BufferGeometry();
@@ -73,45 +45,30 @@ function makeBufferGeometry(verticesArr) {
   geometry.addAttribute( 'normal', new THREE.BufferAttribute( normals, 3 ) );
   geometry.computeVertexNormals(); 
   return geometry;
-  // return new THREE.Mesh(geometry, material);
 }
 
 camera.position.z = 12;
 camera.lookAt(scene.position);
 
-light.position.x = 10;
-light.position.y = 15;
-light.position.z = 25;
+function addLight(position) {
+  let light = new THREE.PointLight(0x777777);
+  light.position.x = position.x;
+  light.position.y = position.y;
+  light.position.z = position.z;
+  scene.add(light);
+  // debugger;
+}
+addLight({x:  0, y: 15, z: 15});
+addLight({x: 15, y:-15, z: 15});
+addLight({x:-15, y:-15, z: 15});
 
-light1.position.x = -10;
-light1.position.y = -15;
-light1.position.z = -25;
-
-scene.add(light);
-scene.add(light1);
-
+addLight({x: 15, y: 15, z:-15});
+addLight({x:  0, y:-15, z:-15});
+addLight({x:-15, y: 15, z:-15});
 
 function render() {
   requestAnimationFrame(render);
   renderer.render(scene, camera);
-}
-
-renderer.domElement.addEventListener('mousedown', function(event) {
-  var startPos = relativePos(event, renderer.domElement);
-  trackDrag(function(event) {
-    model.rotation.y += event.movementX / 100;
-    model.rotation.x += event.movementY / 100;
-  });
-}, false);
-
-function trackDrag(onMove, onEnd) {
-  function end(event) {
-    removeEventListener('mousemove', onMove);
-    removeEventListener('mouseup', end);
-    if (onEnd) onEnd(event);
-  }
-  addEventListener('mousemove', onMove);
-  addEventListener('mouseup', end);
 }
 
 function relativePos(event, element) {
@@ -122,11 +79,55 @@ function relativePos(event, element) {
   };
 }
 
+function findMaxValue(arr) {
+  // Find maximum value of nested Arrays
+  let maxVal = 0;
+  for (let i=0, maxI=arr.length; i<maxI; i++) {
+    let currentVal;
+    if (arr[i] instanceof Array)  currentVal = findMaxValue(arr[i]);
+    else currentVal = arr[i];
+
+    if (currentVal > maxVal) maxVal = Math.abs(currentVal);
+  }
+  return maxVal;
+}
+
+function setDistance(object, distance) {
+  for (let axis in object.position) {
+    if (object.position.hasOwnProperty(axis)) {
+      if (object.position[axis] > 0) {
+        object.position[axis] = distance;
+      } else if (object.position[axis] < 0) {
+        object.position[axis] = -distance;
+      }
+    }
+  }
+}
+
+function setCameraDistance(camera, distance) {
+  camera.position.x = distance;
+  camera.position.y = distance;
+  camera.position.z = distance;
+}
+
 function addModel(modelArr) {
   let material = new THREE.MeshLambertMaterial( {wireframe: false, color: 0x00ff00 });
   material.side = THREE.DoubleSide;
 
-  model = new THREE.Mesh(makeBufferGeometry(modelArr) , material);
+  let geometry = makeBufferGeometry(modelArr);
+
+  var maxPos = findMaxValue(modelArr)+20;
+
+  setCameraDistance(camera, maxPos);
+  camera.lookAt(scene.position);
+
+  for (let i=0; i<scene.children.length; i++) {
+    if (scene.children[i] instanceof THREE.PointLight) {
+      setDistance(scene.children[i], maxPos);
+    }
+  }
+
+  model = new THREE.Mesh(geometry , material);
   scene.add(model);
   render();
 }
