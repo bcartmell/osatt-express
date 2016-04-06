@@ -52,6 +52,15 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	window.getMesh = function getMesh(path) {
+	  var request = new XMLHttpRequest();
+	  request.open('GET', path);
+	  request.addEventListener('load', function () {
+	    _renderMesh2.default.addModel(JSON.parse(request.responseText));
+	  });
+	  request.send();
+	};
+	
 	window.makeMesh = _renderMesh2.default;
 
 /***/ },
@@ -70,7 +79,6 @@
 	
 	
 	var renderer = new _three2.default.WebGLRenderer();
-	var model = void 0;
 	var scene = new _three2.default.Scene();
 	var camera = new _three2.default.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 	var material = new _three2.default.MeshLambertMaterial({ wireframe: false, color: 0x00ff00 });
@@ -178,9 +186,7 @@
 	function addModel(modelArr) {
 	  var material = new _three2.default.MeshLambertMaterial({ wireframe: false, color: 0x00ff00 });
 	  material.side = _three2.default.DoubleSide;
-	
 	  var geometry = makeBufferGeometry(modelArr);
-	
 	  var maxPos = findMaxValue(modelArr) + 20;
 	
 	  setCameraDistance(camera, maxPos);
@@ -192,7 +198,7 @@
 	    }
 	  }
 	
-	  model = new _three2.default.Mesh(geometry, material);
+	  var model = new _three2.default.Mesh(geometry, material);
 	  scene.add(model);
 	  render();
 	}

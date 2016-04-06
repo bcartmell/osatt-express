@@ -4,24 +4,23 @@ import THREE from 'three';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const renderer = new THREE.WebGLRenderer();
-let model;
-let scene = new THREE.Scene(); 
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-let material = new THREE.MeshLambertMaterial( {wireframe: false, color: 0x00ff00 });
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const material = new THREE.MeshLambertMaterial({ wireframe: false, color: 0x00ff00 });
 material.side = THREE.DoubleSide;
 
-let controls = new OrbitControls(camera);
+const controls = new OrbitControls(camera);
 
-scene.add(new THREE.AmbientLight( 0x333333 ));
+scene.add(new THREE.AmbientLight(0x333333));
 
-renderer.setSize( window.innerWidth-10, window.innerHeight-10);
+renderer.setSize(window.innerWidth - 10, window.innerHeight - 10);
 renderer.setClearColor(0x90C3D4);
 document.body.appendChild(renderer.domElement);
 
 function makeModelGeo(meshArr) {
-  var modelGeo = new THREE.Geometry();
+  const modelGeo = new THREE.Geometry();
 
-  var i = meshArr.length;
+  let i = meshArr.length;
   while (i--) {
     meshArr[i].updateMatrix();
     modelGeo.merge(meshArr[i].geometry, meshArr[i].matrix);
@@ -31,19 +30,19 @@ function makeModelGeo(meshArr) {
 }
 
 function makeBufferGeometry(verticesArr) {
-  let geometry = new THREE.BufferGeometry();
-  let vertices = new Float32Array(verticesArr.length * 3);
-  let normals   = new Float32Array( verticesArr.length * 3 );
+  const geometry = new THREE.BufferGeometry();
+  const vertices = new Float32Array(verticesArr.length * 3);
+  const normals = new Float32Array(verticesArr.length * 3);
 
-  for(let i=0; i<verticesArr.length; i++) {
-    for (let j=0; j<3; j++) {
-      vertices[i*3 + j] = (verticesArr[i][j]);
+  for (let i = 0; i < verticesArr.length; i++) {
+    for (let j = 0; j < 3; j++) {
+      vertices[i * 3 + j] = (verticesArr[i][j]);
     }
   }
 
-  geometry.addAttribute( 'position', new THREE.BufferAttribute(vertices, 3));
-  geometry.addAttribute( 'normal', new THREE.BufferAttribute( normals, 3 ) );
-  geometry.computeVertexNormals(); 
+  geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+  geometry.addAttribute('normal', new THREE.BufferAttribute(normals, 3));
+  geometry.computeVertexNormals();
   return geometry;
 }
 
@@ -51,20 +50,20 @@ camera.position.z = 12;
 camera.lookAt(scene.position);
 
 function addLight(position) {
-  let light = new THREE.PointLight(0x777777);
+  const light = new THREE.PointLight(0x777777);
   light.position.x = position.x;
   light.position.y = position.y;
   light.position.z = position.z;
   scene.add(light);
   // debugger;
 }
-addLight({x:  0, y: 15, z: 15});
-addLight({x: 15, y:-15, z: 15});
-addLight({x:-15, y:-15, z: 15});
+addLight({ x: 0, y: 15, z: 15 });
+addLight({ x: 15, y: -15, z: 15 });
+addLight({ x: -15, y: -15, z: 15 });
 
-addLight({x: 15, y: 15, z:-15});
-addLight({x:  0, y:-15, z:-15});
-addLight({x:-15, y: 15, z:-15});
+addLight({ x: 15, y: 15, z: -15 });
+addLight({ x: 0, y: -15, z: -15 });
+addLight({ x: -15, y: 15, z: -15 });
 
 function render() {
   requestAnimationFrame(render);
@@ -72,19 +71,19 @@ function render() {
 }
 
 function relativePos(event, element) {
-  var rect = element.getBoundingClientRect();
+  const rect = element.getBoundingClientRect();
   return {
     x: Math.floor(event.clientX - rect.left),
-    y: Math.floor(event.clientY - rect.top)
+    y: Math.floor(event.clientY - rect.top),
   };
 }
 
 function findMaxValue(arr) {
   // Find maximum value of nested Arrays
   let maxVal = 0;
-  for (let i=0, maxI=arr.length; i<maxI; i++) {
+  for (let i = 0, maxI = arr.length; i < maxI; i++) {
     let currentVal;
-    if (arr[i] instanceof Array)  currentVal = findMaxValue(arr[i]);
+    if (arr[i] instanceof Array) currentVal = findMaxValue(arr[i]);
     else currentVal = arr[i];
 
     if (currentVal > maxVal) maxVal = Math.abs(currentVal);
@@ -93,7 +92,7 @@ function findMaxValue(arr) {
 }
 
 function setDistance(object, distance) {
-  for (let axis in object.position) {
+  for (const axis in object.position) {
     if (object.position.hasOwnProperty(axis)) {
       if (object.position[axis] > 0) {
         object.position[axis] = distance;
@@ -111,30 +110,28 @@ function setCameraDistance(camera, distance) {
 }
 
 function addModel(modelArr) {
-  let material = new THREE.MeshLambertMaterial( {wireframe: false, color: 0x00ff00 });
+  const material = new THREE.MeshLambertMaterial({ wireframe: false, color: 0x00ff00 });
   material.side = THREE.DoubleSide;
-
-  let geometry = makeBufferGeometry(modelArr);
-
-  var maxPos = findMaxValue(modelArr)+20;
+  const geometry = makeBufferGeometry(modelArr);
+  const maxPos = findMaxValue(modelArr) + 20;
 
   setCameraDistance(camera, maxPos);
   camera.lookAt(scene.position);
 
-  for (let i=0; i<scene.children.length; i++) {
+  for (let i = 0; i < scene.children.length; i++) {
     if (scene.children[i] instanceof THREE.PointLight) {
       setDistance(scene.children[i], maxPos);
     }
   }
 
-  model = new THREE.Mesh(geometry , material);
+  const model = new THREE.Mesh(geometry, material);
   scene.add(model);
   render();
 }
 
 module.exports = {
   addModel: addModel,
-  setCameraZ: function(cameraZ) {
+  setCameraZ: function (cameraZ) {
     camera.position.z = cameraZ;
-  }
+  },
 };
